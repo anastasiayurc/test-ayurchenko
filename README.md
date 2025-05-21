@@ -48,7 +48,7 @@ pytest test_insider_homepage.py
 
 
 # Task 4 
-You can find my suggestion in [tests/task04.py](tests.task04.py) written in Python using pytests.
+You can find my suggestion in [tests/task04.py](tests/task04.py) written in Python using pytests.
 To run locally you need to do the following:
 
 1. Configure Python environment
