@@ -1,0 +1,409 @@
+{
+	"info": {
+		"_postman_id": "77956d42-ef20-4b4a-904a-eba0f8a14ef1",
+		"name": "Pet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1353351",
+		"_collection_link": "https://blue-escape-78863.postman.co/workspace/10568f03-f608-4eeb-97f6-09ce6fb6d232/collection/1353351-77956d42-ef20-4b4a-904a-eba0f8a14ef1?action=share&source=collection_link&creator=1353351"
+	},
+	"item": [
+		{
+			"name": "pet/{petId} Find pet by ID Positive",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}pet/{{petId}}",
+					"host": [
+						"{{baseUrl}}pet"
+					],
+					"path": [
+						"{{petId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": []
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "pet/{petId} Find pet by ID Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is not 200\", function () {",
+							"  pm.expect(pm.response.code).to.not.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify that the response contains an error message or code\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.have.property('error').that.is.a('string');",
+							"    pm.expect(responseData).to.have.property('code').that.is.a('number');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Invalid input handling for non-existent petId\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.error).to.exist;",
+							"    pm.expect(responseData.error).to.equal(\"Pet not found\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify response for negative or non-integer petId\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400, 404]);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Proper error handling and error message format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.error).to.exist.and.to.be.a('string');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}pet/{{petId}}",
+					"host": [
+						"{{baseUrl}}pet"
+					],
+					"path": [
+						"{{petId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": []
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "pet Add a new pet to the store Positive",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Save pet ID into a collection variable\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    let petId = responseJson.id;",
+							"",
+							"    if (petId) {",
+							"        pm.collectionVariables.set(\"petId\", petId);",
+							"    } else {",
+							"        console.log(\"Pet ID is not found in the expected path. Check the response structure.\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is in an acceptable range\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the response schema for the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.exist;",
+							"    pm.expect(responseData.category).to.exist;",
+							"    pm.expect(responseData.name).to.exist;",
+							"    pm.expect(responseData.photoUrls).to.exist;",
+							"    pm.expect(responseData.tags).to.exist;",
+							"    pm.expect(responseData.status).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Category object contains the required fields - id and name\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.category).to.exist;",
+							"    pm.expect(responseData.category.id).to.exist;",
+							"    pm.expect(responseData.category.name).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status field should be a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.status).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Status should not be empty\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {{$randomInt}},\n    \"category\": {\n        \"id\": 0,\n        \"name\": \"string\"\n    },\n    \"name\": \"{{$randomFirstName}}\",\n    \"photoUrls\": [\n        \"string\"\n    ],\n    \"tags\": [\n        {\n            \"id\": 0,\n            \"name\": \"string\"\n        }\n    ],\n    \"status\": \"available\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}pet",
+					"host": [
+						"{{baseUrl}}pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pet Add a new pet to the store Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Save pet ID into a collection variable\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    let petId = responseJson.id;",
+							"",
+							"    if (petId) {",
+							"        pm.collectionVariables.set(\"petId\", petId);",
+							"    } else {",
+							"        console.log(\"Pet ID is not found in the expected path. Check the response structure.\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is in an acceptable range\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the response schema for the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.id).to.exist;",
+							"    pm.expect(responseData.category).to.exist;",
+							"    pm.expect(responseData.name).to.exist;",
+							"    pm.expect(responseData.photoUrls).to.exist;",
+							"    pm.expect(responseData.tags).to.exist;",
+							"    pm.expect(responseData.status).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Category object contains the required fields - id and name\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.category).to.exist;",
+							"    pm.expect(responseData.category.id).to.exist;",
+							"    pm.expect(responseData.category.name).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status field should be a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.status).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Status should not be empty\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {},\n    \"category\": {\n        \"id\": 0,\n        \"name\": \"string\"\n    },\n    \"name\": \"doggie\",\n    \"photoUrls\": [\n        \"string\"\n    ],\n    \"tags\": [\n        {\n            \"id\": 0,\n            \"name\": \"string\"\n        }\n    ],\n    \"status\": \"available\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}pet",
+					"host": [
+						"{{baseUrl}}pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pet/{petId} uploadImage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text"
+					},
+					{
+						"key": "file",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"description": "My pet image",
+							"type": "file",
+							"src": "/Users/macintosh/Desktop/mypet.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}pet/{{petId}}/uploadImage",
+					"host": [
+						"{{baseUrl}}pet"
+					],
+					"path": [
+						"{{petId}}",
+						"uploadImage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pet Update an existing pet",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 1111022036854758000,\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"status\": \"available\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pet",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pet/{petId} Delete a pet",
+			"request": {
+				"method": "DELETE",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "api_key",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "special-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://petstore.swagger.io/v2/",
+			"type": "default"
+		},
+		{
+			"key": "petId",
+			"value": "9223372036854758000",
+			"type": "default"
+		}
+	]
+}
